@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/slider.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-slider.js"></script>
+</head>
+<body>
+        <div class="container-fluid">
+                <div class="row bg-black py-md-3">
+        
+                </div>
+                <div class="row py-md-1 bg-ligth-bar shadow">
+                    <div class="col-md-2 text-center">
+                    
+                            <h1 class="text-dark">Vote App</h1>
+                    
+                    </div>
+                    <div class="col-md-8 py-md-1 text-center">
+                            <h3 class="text-dark">Profile</h3>
+                    </div>
+                    
+                </div>
+                <div class="row">
+                    <div class="col-md-2 bg-dark">
+                        <div class="row bg-black">
+                            <div class="custom-search form-group has-search" >
+                                <span class="fa fa-search form-control-feedback"></span>
+                                <input type="text" class="bg-black form-control"  placeholder="Search">
+                            </div>
+                        </div>
+                        <div class="row bg-custom-dark-active py-md-2">
+                            <div class="col-md-3 py-md-3">
+                                    <a><img src="data:image/png;base64,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" name="aboutme" width="50" height="50" class="rounded-circle"></a>
+                            </div>
+                            <div class="col-md-9">
+                                <h5 class="media-heading text-center text-light py-md-3">Company meetings</h5>
+                            </div>
+                        
+                        </div>
+                        <div class="row bg-custom-dark py-md-2">
+                            <div class="col-md-3 py-md-3">
+                                    <a><img src="data:image/png;base64,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" name="aboutme" width="50" height="50" class="rounded-circle"></a>
+                            </div>
+                            <div class="col-md-9">
+                                <h5 class="media-heading text-center text-light py-md-3">Company weeks reports</h5>
+                            </div>
+                        
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-9">
+                            <div class="container emp-profile">
+                                    <form method="post">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="profile-img">
+                                                    <img src="https://sun1.tele2-kz.userapi.com/c830109/v830109414/132d8d/GwFRx9bpWyk.jpg?ava=1" alt=""/>
+                                                    <div class="file btn btn-lg btn-primary">
+                                                        Change Photo
+                                                        <input type="file" name="file"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="profile-head">
+                                                            <h5>
+                                                                Kshiti Ghelani
+                                                            </h5>
+                                                            <h6>
+                                                                Web Developer and Designer
+                                                            </h6>
+                                                            <p class="proile-rating">RANKINGS : <span>8/10</span></p>
+                                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                                        <li class="nav-item">
+                                                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Skills</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Profile"/>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="profile-work">
+                                                    <p>WORK LINK</p>
+                                                    <a href="">Website Link</a><br/>
+                                                    <a href="">Bootsnipp Profile</a><br/>
+                                                    <a href="">Bootply Profile</a>
+                                                    <p>SKILLS</p>
+                                                    <a href="">Web Designer</a><br/>
+                                                    <a href="">Web Developer</a><br/>
+                                                    <a href="">WordPress</a><br/>
+                                                    <a href="">WooCommerce</a><br/>
+                                                    <a href="">PHP, .Net</a><br/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="tab-content profile-tab" id="myTabContent">
+                                                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <label>User Id</label>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <p>21631</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <label>Name</label>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <p>Арнур Келгенбаев</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <label>Email</label>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <p>Arnur@gmail.com</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <label>Phone</label>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <p>8 747 489 12 67</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <label>Profession</label>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <p>Web Developer and Designer</p>
+                                                                    </div>
+                                                                </div>
+                                                    </div>
+                                                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <label>Web Designer</label>
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <div class="progress">
+                                                                    <div class="progress-bar bg-danger" style="width:20%">
+                                                                        20%
+                                                                    </div>
+                                                                        
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <label>Web Developer</label>
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <div class="progress">
+                                                                    <div class="progress-bar bg-warning" style="width:40%">
+                                                                        40%
+                                                                    </div>
+                                                                        
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <label>WordPress</label>
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <div class="progress">
+                                                                    <div class="progress-bar bg-success" style="width:70%">
+                                                                        70%
+                                                                    </div>
+                                                                        
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <label>WooCommerce</label>
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <div class="progress">
+                                                                    <div class="progress-bar bg-success" style="width:50%">
+                                                                        50%
+                                                                    </div>
+                                                                        
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                        
+                                                                <p>Detail description</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>           
+                                </div>
+                    </div>
+                    
+                    
+                </div>
+        
+                
+            </div>
+        
+</body>
+</html>

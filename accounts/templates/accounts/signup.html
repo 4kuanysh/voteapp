@@ -1,0 +1,51 @@
+{% extends 'accounts/base.html' %}
+
+{% block signup_btn %}
+
+    <span class="btn btn-light float-right">Sign up</span>
+{% endblock signup_btn %}
+
+{% block content %}
+<div class="col-md-5 offset-md-3 bg-light px-md-5 py-md-3  rounded">
+    <form class="form-horizontal"  action="" method="POST">
+        <div class="row">
+        
+            <div class="col-md-12">
+                <h2 class="ml-md-5">Registration</h2>
+                <hr>
+            </div>
+        </div>
+        {% csrf_token %}
+        
+        {% for field in form %}
+
+            {% if field.errors %}
+                <div class="alert alert-danger">
+                    {{ field.errors }}
+                </div>
+            {% endif %}
+            <div class="row">
+                    <div class="col-md-12">
+                            <div class="form-group has-danger">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+                                    
+
+                                    {{ field }}
+                                </div>
+                            </div>
+                        </div>
+            </div>
+        {% endfor %}
+            
+  
+        <div class="row">
+                <div class="col-md-8"></div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-dark"><i class="fa fa-user-plus"></i> Sign up</button>
+                </div>
+            </div>
+    </form>
+</div>
+{% endblock content %}
+    

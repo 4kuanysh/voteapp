@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+</head>
+<body>
+    
+    <div class="container-fluid">
+        <div class="row ">
+            <div class="container">
+                <div class="row py-md-1">
+                    <div class="col-md-4">
+                    
+                            <h1 class="text-dark">Vote App</h1>
+                  
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4 py-md-2 ">
+                        
+                        {% block signup_btn %}
+                            
+                        {% endblock signup_btn %}
+                            
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row bg-black">
+            <div class="col-md-12">
+                <div class="container">
+                    <div class="row">
+                        {% block content %}
+                            
+                        {% endblock content %}
+                    </div>
+                        
+                </div>
+            </div>
+            
+        </div>
+        <!-- Footer -->
+        <footer id="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-5">
+                        <ul class="list-unstyled list-inline social text-center">
+                            <li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-facebook"></i></a></li>
+                            <li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-twitter"></i></a></li>
+                            <li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-instagram"></i></a></li>
+                            <li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-google-plus"></i></a></li>
+                            <li class="list-inline-item"><a href="javascript:void();" target="_blank"><i class="fa fa-envelope"></i></a></li>
+                        </ul>
+                    </div>
+                    </hr>
+                </div>
+                <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center">
+                            <p>Vote App платформа для поиска сильнейших сторон</p>
+                            <p class="h6">&copy All right Reserved.<a class="text-green ml-2" href="#" target="_blank">VoteApp</a></p>
+                        </div>
+                        </hr>
+                    </div>		
+            </div>
+        </footer>
+        <!-- Footer -->
+    </div>
+
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
