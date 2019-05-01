@@ -32,6 +32,9 @@ class Room(models.Model):
     def get_add_member_url(self):
         return reverse('add_member_url', kwargs={'slug': self.slug})
 
+    def get_settings_url(self):
+        return reverse('room_settings_url', kwargs={'slug': self.slug})
+
     def save(self, *args, **kwargs):
         if not self.id:
             self.slug = gen_slug(self.name)

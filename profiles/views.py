@@ -66,6 +66,7 @@ class RoomDetail(LoginRequiredMixin, View):
             'members':members,
             'room_admin': room_admin
         }
+
         return render(request, 'profiles/room_detail.html', context=context)
     def post(self, request, slug):
         room = get_object_or_404(Room, slug__iexact=slug)
@@ -116,3 +117,7 @@ def search_users(request):
         }
     print('Data', data)
     return JsonResponse(data)
+
+class RoomSettings(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, 'profiles/room_settings.html', context={})
