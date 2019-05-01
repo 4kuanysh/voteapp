@@ -1,0 +1,32 @@
+{% extends 'profiles/base.html' %}
+
+
+{% block title %}
+    Registration - {{ block.super }}
+{% endblock title %}
+    
+
+{% block content %}
+    
+    <h1>Hello, {{ user.id }} - {{ user.username}}</h1>
+    <img src="{% if user.userprofile.avatar %}{{ user.userprofile.avatar.url }} {% endif %}" alt="avatar" width="250">
+    <h3>Rooms:</h3>
+    <ul>
+        
+        {% for room in user.rooms.all %}
+            
+            <li> <a href="{{ room.get_absolute_url }}"> {{ room.name }} </a> </li>
+
+        {% endfor %}
+        
+        <form action="{% url 'create_room_url' %}" method="POST">
+            {% csrf_token %}
+            {{ createRoom_form.as_p }}
+            <button type="submit">Create</button>
+        </form>
+            
+    </ul>
+    <a href="{% url 'logout_url' %}">Logout</a>
+    <a href="{% url 'edit_profile_url' %}">Edit profile</a>
+{% endblock content %}
+    

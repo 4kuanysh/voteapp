@@ -1,0 +1,33 @@
+{% extends 'profiles/base.html' %}
+
+
+{% block title %}
+    Registration - {{ block.super }}
+{% endblock title %}
+    
+
+{% block content %}
+    
+    <h1>Hello, {{ user.id }} - {{ user.username}}</h1>
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ form.avatar.br }}
+        <hr>
+        {{ form }}
+        <button type="submit">submit</button>
+    </form>
+    <h3>Rooms:</h3>
+    <ul>
+        
+        {% for room in user.rooms.all %}
+            
+            <li> {{ room.name}} </li>
+        {% endfor %}
+        
+
+            
+    </ul>
+    <a href="{% url 'logout_url' %}">Logout</a>
+{% endblock content %}
+    

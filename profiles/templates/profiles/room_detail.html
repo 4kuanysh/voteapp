@@ -1,0 +1,61 @@
+{% extends 'profiles/base.html' %}
+
+
+{% block title %}
+    Room
+{% endblock title %}
+    
+
+{% block content %}
+    
+    <h1>{{ room.name }}</h1>
+
+    <h3>Members:</h3>
+    <ul>
+        {% for member in members %}
+            <li>
+                <img src="{{ member.userprofile.avatar.url }}" alt="avatar" width="80">
+                {{ member.username }}
+                {% if member == room_admin %}
+                    admin
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+    {% if user == room_admin %}
+        <h3>Add user to room</h3>
+        <form action="{{ Room.get_absolute_url }}" method="POST">
+            {% csrf_token %}
+            <input type="search" placeholder="Search" aria-label="Search" name='search' id='id_search'>
+            <button type="submit">Add</button>
+        </form>
+        <h4>Result search</h4>
+        <div id='result_search'></div>
+    {% endif %}
+        
+    
+    <script>
+        $("#id_search").keyup(function () {
+            var username = $(this).val();
+
+            $.ajax({
+                url: '{% url "search_user_ajax" %}',
+                data: {
+                'username': username
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.username) {
+                        $('#result_search').html('<img src='+ data.avatar_url +' width=50> <p>'+ data.username +'</p>')
+                    }
+                    else {
+                        $('#result_search').html('<p>...</p>')
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock content %}
+    
