@@ -2,11 +2,42 @@
 
 
 {% block title %}
-    Room settings
+Room settings
 {% endblock title %}
-    
+
 
 {% block content %}
-    Settings
+<div class="containter">
+    <div class="row">
+        <div class="col-md-6">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    
+                    {{ category_form }}
+                </div>
+                <button type="submit">Add</button>
+            </form>
+           
+        </div>
+        <div class="col-md-6">
+            
+                
+        
+            <form action="{%url 'room_category_delete_url' cur_room.slug %}" method="POST">
+                {% csrf_token %}
+                {% for existing_category in existing_categories %}
+                <div class="form-check">
+                    <input class="form-check-input" name="delete_category" type="checkbox" value="{{existing_category.category_skill.name}}" id="CatCheck{{existing_category.category_skill.id}}">
+                    <label class="form-check-label" for="CatCheck{{existing_category.category_skill.id}}">
+                            {{ existing_category.category_skill.name }}
+                    </label>
+                </div>
+                {% endfor %}
+
+                <button type="submit">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock content %}
-    

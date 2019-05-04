@@ -2,10 +2,16 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from .models import Room, UserProfile, RoomUser
+from .models import *
 
 admin.site.register(Room)
 admin.site.register(RoomUser)
+
+admin.site.register(Skill)
+admin.site.register(CategorySkill)
+admin.site.register(RoomCategorySkill)
+admin.site.register(UserSkill)
+
 
 class UserInline(admin.StackedInline):
     model = UserProfile

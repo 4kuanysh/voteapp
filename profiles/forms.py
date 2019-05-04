@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from .models import UserProfile, Room
+from .models import *
 
 
 class EditUserProfileForm(forms.ModelForm):
@@ -24,6 +24,12 @@ class AddRoomMemberForm(forms.ModelForm):
         fields = [
             'username'
         ]
+
+class CategorySkillForm(forms.Form):
+    category = forms.ModelChoiceField( 
+        queryset=CategorySkill.objects.all().order_by('name'), 
+        widget=forms.Select(attrs={'class': 'form-control'}) 
+    )
 
     
     

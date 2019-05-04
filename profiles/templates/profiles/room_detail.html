@@ -7,36 +7,79 @@
     
 
 {% block content %}
+    <div class="container">
+
     
-    <h1>{{ room.name }}</h1>
+        <h1>{{ room.name }}</h1>
 
-    <h3>Members:</h3>
-    <ul>
-        {% for member in members %}
-            <li>
-                <img src="{{ member.userprofile.avatar.url }}" alt="avatar" width="80">
-                {{ member.username }}
-                {% if member == room_admin %}
-                    admin
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
+        
 
-    <hr>
-    {% if user == room_admin %}
-        <h3>Add user to room</h3>
-        <form action="{{ Room.get_absolute_url }}" method="POST">
+        <hr>
+        {% if user == room_admin %}
+            <h3>Add user to room</h3>
+            <form action="{{ Room.get_absolute_url }}" method="POST">
+                {% csrf_token %}
+                <input type="search" placeholder="Search" aria-label="Search" name='search' id='id_search'>
+                <button type="submit">Add</button>
+            </form>
+            <h4>Result search</h4>
+            <div id='result_search'></div>
+        {% endif %}
+        <hr>
+        
+        {% if user == room_admin %}
+            <a href="{% url 'room_settings_url' room.slug %}" >Settings</a>  
+        {% endif %}
+            
+          
+        <hr>
+        <form action="{% url 'calc_skill_url' room.slug %}" method="POST">
+            
             {% csrf_token %}
-            <input type="search" placeholder="Search" aria-label="Search" name='search' id='id_search'>
-            <button type="submit">Add</button>
+            <h3>Members:</h3>
+            
+                {% for member in members %}
+                <div class="form-check">
+                        <input class="form-check-input" type="radio" name="member" id="{{member.id}}" value="{{ member.username }}" checked>
+                        
+                    <img src="{{ member.userprofile.avatar.url }}" alt="avatar" width="80">
+                    {{ member.username }}
+                    {% if member == room_admin %}
+                    admin
+                    {% endif %}
+                </div>
+                {% endfor %}
+            
+            <div class="row">
+                {% for x in skills %}
+        
+                <div class="col-md-4">
+                    {% for i in x %}
+        
+                    {% if forloop.first %}
+                    
+                    <h3>{{ i.category }}</h3>
+                    {% endif %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="skill" id="{{i.id}}" value="{{ i.name }}" checked>
+                        <label class="form-check-label" for="{{i.id}}">
+                            {{i.name}}
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                
+        
+                {% endfor %}
+                <input type="range" name="score" id="score" min='0' max=10>
+
+                <button type="submit">asd</button>
+            </div>
+            
         </form>
-        <h4>Result search</h4>
-        <div id='result_search'></div>
-    {% endif %}
-    <hr>
-    <a href="{{ Room.get_settings_url }}">Settings</a>    
-    
+
+    </div>
     <script>
         $("#id_search").keyup(function () {
             var username = $(this).val();
