@@ -80,3 +80,14 @@ class UserSkill(models.Model):
 
     def __str__(self):
         return "{} - {}".format(self.user, self.skill.name)
+
+class History(models.Model):
+    who_vote = models.ForeignKey(User, related_name='his_votes', on_delete=models.CASCADE)
+    for_whom_vote = models.ForeignKey(User, related_name='votes_for_him', on_delete=models.CASCADE)
+    coefficient_who_vote = models.DecimalField(max_digits=5, decimal_places=2)
+    mark_who_vote = models.IntegerField()
+    value_for_whom_vote = models.DecimalField(max_digits=5, decimal_places=2)
+    date_voting = models.DateTimeField(auto_now_add=True, auto_now=False)
+
+    def __str__(self):
+        return "{}, for {}".format(self.who_vote, self.for_whom_vote) 

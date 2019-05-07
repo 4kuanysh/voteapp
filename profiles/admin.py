@@ -11,6 +11,7 @@ admin.site.register(Skill)
 admin.site.register(CategorySkill)
 admin.site.register(RoomCategorySkill)
 admin.site.register(UserSkill)
+admin.site.register(History)
 
 
 class UserInline(admin.StackedInline):

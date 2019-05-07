@@ -206,6 +206,14 @@ def calc_skill(request, slug):
                 print('----')
                 user_score -= 1*cur_user_score
 
+            new_history = History(
+                who_vote=request.user, 
+                for_whom_vote=user, 
+                coefficient_who_vote=cur_user_score, 
+                mark_who_vote=score,
+                value_for_whom_vote= user_score
+                )
+            new_history.save()
             UserSkill.objects.filter(id=sid).update(value=user_score)
 
     print(skill, score, member, user_score)
