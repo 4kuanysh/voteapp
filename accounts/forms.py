@@ -30,8 +30,8 @@ class UserLoginForm(forms.Form):
 
 class UserSignupForm(forms.ModelForm):
 
-    password = forms.CharField(widget=forms.PasswordInput)
-    password_confirm = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Пароль'}))
+    password_confirm = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Повторить пароль'}))
 
     class Meta:
         model = User
@@ -42,6 +42,10 @@ class UserSignupForm(forms.ModelForm):
             'password',
         ]
 
+        widgets ={
+            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Логин'}),
+            'email': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),  
+        }
     
     def clean_email(self):
         email = self.cleaned_data.get('email')

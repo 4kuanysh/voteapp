@@ -2,27 +2,46 @@
 
 
 {% block title %}
-Room settings
+<h3> Room settings </h3>
 {% endblock title %}
 
 
+{% block sidebar %}
+<div class="list-group">
+        <h3 class="list-group-item">
+            <p>Участники:</p>
+        </h3>
+        {% for member in members %}
+        <label class="list-group-item list-group-item-action">
+            <img src="{{ member.userprofile.avatar.url }}" alt="avatar" width="80" for="{{member.username}}-{{member.id}}">
+            {{ member.username }}
+            {% if member == room_admin %}
+            admin
+            {% endif %}
+            
+        </label>
+        {% endfor %}
+
+    </div>
+{% endblock sidebar %}
+    
+
 {% block content %}
-<div class="containter">
+<div class="col-md-12">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <form action="" method="POST">
                 {% csrf_token %}
+                <h3>Добавить категорию: </h3>
                 <div class="form-group">
-                    
-                    {{ category_form }}
+                    {{ category_form.category }}
                 </div>
-                <button type="submit">Add</button>
+                <button type="submit" class="btn btn-dark mt-md-3">Добавить категорию</button>
             </form>
            
         </div>
-        <div class="col-md-6">
-            
-                
+        <div class="col-md-4">
+            <h3>Удалить категории: </h3>
         
             <form action="{%url 'room_category_delete_url' cur_room.slug %}" method="POST">
                 {% csrf_token %}
@@ -35,9 +54,28 @@ Room settings
                 </div>
                 {% endfor %}
 
-                <button type="submit">Delete</button>
+                <button type="submit" class="btn btn-dark mt-md-3">Удалить выбранное</button>
             </form>
+        </div>
+        <div class="col-md-4">
+            <h3>Поиск пользователей</h3>
+            <form action="{{ Room.get_absolute_url }}" method="POST">
+                {% csrf_token %}
+            <input class="form-control" type="search" placeholder="Username пользователя" aria-label="Search" name='search' id='id_search'>
+                <button type="submit" class="btn btn-dark mt-md-3">Добавить в комнату</button>
+            </form>
+            <h4>Результат поиска</h4>
+            <div id='result_search'></div>
         </div>
     </div>
 </div>
+
+<div class="admin-panel align-items-center">
+    <p>Админ панель</p>
+    
+    <a href="{{ cur_room.get_absolute_url }}" class="btn btn-dark">Комната</a>
+    
+</div>
+
+
 {% endblock content %}

@@ -1,55 +1,138 @@
 {% extends 'profiles/base.html' %}
 
 
+{% block pagetitle %}
+Profile
+{% endblock pagetitle %}
+
+
+
+{% block sidebar %}
+<div class="list-group">
+    <h3 class="list-group-item">
+        <p>Ваши комнаты:</p>
+    </h3>
+    {% for room in user.rooms.all %}
+
+    <a class="list-group-item list-group-item-action" href="{{ room.get_absolute_url }}">
+        <h4>{{ room.name }}</h4>
+        <small>{{ room.created }}</small>
+    </a>
+    {% endfor %}
+</div>
+{% endblock sidebar %}
+
 {% block title %}
-Registration - {{ block.super }}
+<h3>Ваш Профиль:</h3>
 {% endblock title %}
 
 
 {% block content %}
-<div class="container">
-    <h1>Hello, {{ user.id }} - {{ user.username}}</h1>
-    <img src="{% if user.userprofile.avatar %}{{ user.userprofile.avatar.url }} {% endif %}" alt="avatar" width="250">
-    <h3>Rooms:</h3>
-    <ul>
+<div class="col-md-3">
+    <img class="img-thumbnail" src="{% if user.userprofile.avatar %}{{ user.userprofile.avatar.url }} {% endif %}"
+        alt="avatar" width="200">
 
-        {% for room in user.rooms.all %}
-
-        <li> <a href="{{ room.get_absolute_url }}"> {{ room.name }} </a> </li>
-
-        {% endfor %}
-
-        <form action="{% url 'create_room_url' %}" method="POST">
-            {% csrf_token %}
-            {{ createRoom_form.as_p }}
-            <button type="submit">Create</button>
-        </form>
-
-    </ul>
-    <hr>
-    
-    {% for skill in skills %}
-         <br>
-        
-    
-        
-    <div class="row">
-        <div class="col-md-4">
-            <label>{{skill.skill.name}}</label>
+</div>
+<div class="col-md-9">
+    <div   class="row">
+        <div class="col-md-5">
+            <h3> {{ user.username }}</h3>
         </div>
-        <div class="col-md-8">
-            <div class="progress">
-                <div class="progress-bar {% if skill.value < 50 %} bg-danger {% else %} bg-success {% endif %}progress-bar-striped" style='width:{{skill.value}}%'>
-                    {{skill.value}}%
-                </div>
+        <div class="col-md-7">
+            <a href="{% url 'edit_profile_url' %}" class="btn btn-dark">Изменить профиль</a>
+            <!-- Button to Open the Modal -->
+            <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#myModal">
+                Создать комнату
+            </button>
+            <a href="{% url 'logout_url' %}" class="btn btn-dark">Выйти</a>
 
+            <!-- The Modal -->
+            <div class="modal" id="myModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Создать комнату</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <form action="{% url 'create_room_url' %}" method="POST">
+                                {% csrf_token %}
+                                {{ createRoom_form.as_p }}
+                                <button type="submit">Создать</button>
+                            </form>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Закрыть</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 py-md-5">
+            <ul class="nav nav-tabs mt-md-5" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="about-tab" data-toggle="tab" href="#about" role="tab"
+                        aria-controls="about" aria-selected="true">О вас</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="skills-tab" data-toggle="tab" href="#skills" role="tab"
+                        aria-controls="skills" aria-selected="false">Способности</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10">
+            <div class="tab-content mt-md-4" id="myTabContent">
+                <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-tab">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Имя пользователя:</label>
+                        </div>
+                        <div class="col-md-7 text-primary">
+                            {{ user.username}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Email: </label>
+                        </div>
+                        <div class="col-md-7 text-primary">
+                            {{ user.email}}
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="skills" role="tabpanel" aria-labelledby="skills-tab">
+                    {% for skill in skills %}
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>{{skill.skill.name}}</label>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="progress">
+                                <div class="progress-bar {% if skill.value < 50 %} bg-danger {% else %} bg-success {% endif %}progress-bar-striped"
+                                    style='width:{{skill.value}}%'>
+                                    {{skill.value}}%
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
 
-    {% endfor %}
-    <hr>
-    <a href="{% url 'logout_url' %}">Logout</a>
-    <a href="{% url 'edit_profile_url' %}">Edit profile</a>
 </div>
+
 {% endblock content %}

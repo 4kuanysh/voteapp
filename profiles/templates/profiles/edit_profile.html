@@ -1,33 +1,47 @@
 {% extends 'profiles/base.html' %}
 
 
+{% block pagetitle %}
+    Редактировать профиль
+{% endblock pagetitle %}
+    
+
+{% block sidebar %}
+<div class="list-group">
+    <h3 class="list-group-item">
+        <p>Ваши комнаты:</p>
+    </h3>
+    {% for room in user.rooms.all %}
+
+    <a class="list-group-item list-group-item-action" href="{{ room.get_absolute_url }}">
+        <h4>{{ room.name }}</h4>
+        <small>{{ room.created }}</small>
+    </a>
+    {% endfor %}
+</div>
+{% endblock sidebar %}
+    
+
 {% block title %}
-    Registration - {{ block.super }}
+    Редактировать профиль
 {% endblock title %}
     
 
 {% block content %}
-    
-    <h1>Hello, {{ user.id }} - {{ user.username}}</h1>
+<div class="col-md-3">
+    <img class="img-thumbnail" src="{% if user.userprofile.avatar %}{{ user.userprofile.avatar.url }} {% endif %}"
+        alt="avatar" width="200">
     <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-
-        {{ form.avatar.br }}
-        <hr>
-        {{ form }}
-        <button type="submit">submit</button>
+        {{ form.as_p  }}
+        <button type="submit">Изменить фото</button>
     </form>
-    <h3>Rooms:</h3>
-    <ul>
-        
-        {% for room in user.rooms.all %}
-            
-            <li> {{ room.name}} </li>
-        {% endfor %}
-        
-
-            
-    </ul>
-    <a href="{% url 'logout_url' %}">Logout</a>
+</div>
+<div class="col-md-9">
+    <h1>Hello, {{ user.id }} - {{ user.username}}</h1>
+    
+    
+    <a href="{% url 'logout_url' %}" class="btn btn-dark">Logout</a>
+</div>
 {% endblock content %}
     

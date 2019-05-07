@@ -1,105 +1,111 @@
 {% extends 'profiles/base.html' %}
 
 
+{% block pagetitle %}
+Room
+{% endblock pagetitle %}
+
+
 {% block title %}
-    Room
+
+<h1>{{ room.name }}</h1>
+
 {% endblock title %}
-    
 
-{% block content %}
-    <div class="container">
 
-    
-        <h1>{{ room.name }}</h1>
+{% block openform %}
+<form action="{% url 'calc_skill_url' room.slug %}" method="POST">
+    {% csrf_token %}
 
-        
+    {% endblock openform %}
 
-        <hr>
-        {% if user == room_admin %}
-            <h3>Add user to room</h3>
-            <form action="{{ Room.get_absolute_url }}" method="POST">
-                {% csrf_token %}
-                <input type="search" placeholder="Search" aria-label="Search" name='search' id='id_search'>
-                <button type="submit">Add</button>
-            </form>
-            <h4>Result search</h4>
-            <div id='result_search'></div>
-        {% endif %}
-        <hr>
-        
-        {% if user == room_admin %}
-            <a href="{% url 'room_settings_url' room.slug %}" >Settings</a>  
-        {% endif %}
+    <!-- SIDEBAR START -->
+    {% block sidebar %}
+    <div class="list-group">
+        <h3 class="list-group-item">
+            <p>Участники:</p>
+        </h3>
+        {% for member in members %}
+        <label class="list-group-item list-group-item-action">
+            <input class="form-check-input" type="radio" name="member" id="{{member.username}}-{{member.id}}" value="{{ member.username }}"
+            checked>
+            <img src="{{ member.userprofile.avatar.url }}" alt="avatar" width="80" for="{{member.username}}-{{member.id}}">
+            {{ member.username }}
+            {% if member == room_admin %}
+            <span class="badge badge-warning">admin</span>
+            {% endif %}
             
-          
-        <hr>
-        <form action="{% url 'calc_skill_url' room.slug %}" method="POST">
-            
-            {% csrf_token %}
-            <h3>Members:</h3>
-            
-                {% for member in members %}
-                <div class="form-check">
-                        <input class="form-check-input" type="radio" name="member" id="{{member.id}}" value="{{ member.username }}" checked>
-                        
-                    <img src="{{ member.userprofile.avatar.url }}" alt="avatar" width="80">
-                    {{ member.username }}
-                    {% if member == room_admin %}
-                    admin
-                    {% endif %}
-                </div>
-                {% endfor %}
-            
-            <div class="row">
-                {% for x in skills %}
-        
-                <div class="col-md-4">
-                    {% for i in x %}
-        
-                    {% if forloop.first %}
-                    
-                    <h3>{{ i.category }}</h3>
-                    {% endif %}
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="skill" id="{{i.id}}" value="{{ i.name }}" checked>
-                        <label class="form-check-label" for="{{i.id}}">
-                            {{i.name}}
-                        </label>
-                    </div>
-                    {% endfor %}
-                </div>
-                
-                
-        
-                {% endfor %}
-                <input type="range" name="score" id="score" min='0' max=10>
-
-                <button type="submit">asd</button>
-            </div>
-            
-        </form>
+        </label>
+        {% endfor %}
 
     </div>
-    <script>
-        $("#id_search").keyup(function () {
-            var username = $(this).val();
 
-            $.ajax({
-                url: '{% url "search_user_ajax" %}',
-                data: {
-                'username': username
-                },
-                dataType: 'json',
-                success: function (data) {
-                    if (data.username) {
-                        $('#result_search').html('<img src='+ data.avatar_url +' width=50> <p>'+ data.username +'</p>')
-                    }
-                    else {
-                        $('#result_search').html('<p>...</p>')
-                    }
-                }
-            });
-        });
-    </script>
-{% endblock content %}
-    
+
+
+
+    {% endblock sidebar %}
+    <!-- SIDEBAR END -->
+
+    {% block content %}
+
+    <div class="col-md-10">
+
+        <div class="row">
+            {% for x in skills %}
+
+            <div class="col-md-4">
+                {% for i in x %}
+
+                {% if forloop.first %}
+
+                <h3>{{ i.category }}</h3>
+                {% endif %}
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="skill" id="{{i.id}}" value="{{ i.name }}"
+                        checked>
+                    <label class="form-check-label" for="{{i.id}}">
+                        {{i.name}}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+
+
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+    <div class="col-md-2 text-center">
+        <h2 id="valrange">0</h2>
+        <div class="slider-wrapper mb-1">
+            <input class="custom-range" type="range" name="score" id="score" min='0' max=10>
+        </div>
+        <div class="row mx-md-auto">
+            <button type="submit" class="btn btn-dark ">Оценить</button>      
+        </div>     
+    </div>
+    {% if user == room_admin %}
+    <div class="admin-panel align-items-center">
+        <p>Админ панель</p>
+        
+        <a href="{% url 'room_settings_url' room.slug %}" class="btn btn-dark">Настройки</a>
+        
+    </div>
+    {% endif %}
+
+
+    <script>    
+           
+                $(document).on('input', '#score', function() {
+                    $('#valrange').html( $(this).val() );
+                });
+        </script>
+    {% endblock content %}
+
+
+
+    {% block endform %}
+</form>
+{% endblock endform %}

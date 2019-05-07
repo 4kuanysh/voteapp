@@ -2,17 +2,37 @@
 
 
 {% block title %}
-    Registration - {{ block.super }}
+Registration - {{ block.super }}
 {% endblock title %}
-    
 
-{% block content %}
-    
-    <form action="" method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Sign up</button>
-    </form>
-    <a href="{% url 'login_url' %}">Login</a>
-{% endblock content %}
-    
+
+{% block link %}
+<a href="{% url 'login_url' %}" class="float-right text-warning">Войти</a>
+{% endblock link %}
+
+
+{% block form %}
+<div class="card" style="background: rgba(235, 235, 235, 0.5);">
+    <div class="card-body">
+        <h4 class="card-title text-center">Регистрация</h4>
+        <hr>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.username }}
+            </div>
+            <div class="form-group">
+                {{ form.email }}
+            </div>
+            <div class="form-group">
+                {{ form.password }}
+            </div>
+            <div class="form-group">
+                {{ form.password_confirm }}
+            </div>
+           
+            <button type="submit" class='btn btn-warning btn-block text-dark'>Зарегистрироваться</button>
+        </form>
+    </div>
+</div>
+{% endblock form %}

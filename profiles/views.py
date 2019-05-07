@@ -118,9 +118,11 @@ def search_users(request):
 class RoomSettings(LoginRequiredMixin, View):
     def get(self, request, slug):
         cur_room = Room.objects.get(slug=slug)
-
-
-        for m in RoomUser.objects.filter(room=cur_room):
+        msRoomUser = RoomUser.objects.filter(room=cur_room)
+        members = [user.user for user in msRoomUser]
+        if not members.count(request.user):
+            raise Http404
+        for m in msRoomUser:
             if m.is_admin:
                 room_admin = m.user
         if room_admin != request.user:
@@ -137,6 +139,7 @@ class RoomSettings(LoginRequiredMixin, View):
             'category_skill': category_skill,
             'category_form': category_form,
             'existing_categories': existing_categories,
+            'members':members,
             'cur_room': cur_room
         }
 
@@ -146,7 +149,10 @@ class RoomSettings(LoginRequiredMixin, View):
         print(category_skill)
         cur_room = Room.objects.get(slug=slug)
         room_skills = RoomCategorySkill.objects.filter(room=cur_room)
-        
+        msRoomUser = RoomUser.objects.filter(room=cur_room)
+        members = [user.user for user in msRoomUser]
+        if not members.count(request.user):
+            raise Http404
         category_form = CategorySkillForm(request.POST)
         if category_form.is_valid():
             category=category_form.cleaned_data.get('category')
@@ -164,6 +170,7 @@ class RoomSettings(LoginRequiredMixin, View):
             'category_skill': category_skill,
             'category_form': category_form,
             'existing_categories': existing_categories,
+            'members':members,
             'cur_room': cur_room
         }
         return render(request, 'profiles/room_settings.html', context=context)

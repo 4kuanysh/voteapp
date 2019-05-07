@@ -6,44 +6,30 @@
 {% endblock title %}
     
 
-{% block content %}
-<div class="wrapper-head"> 
-    <div class="container" >
-        <div class="row">
-            <div class="col-md-8">
-                <h1>Vote App</h1>
+{% block link %}
+    <a href="{% url 'signup_url' %}" class="float-right text-warning">Регистрация</a>    
+{% endblock link %}
+    
+
+{% block form %}
+
+<div class="card" style="background: rgba(235, 235, 235, 0.5);">
+    <div class="card-body">
+        <h4 class="card-title text-center">Войти</h4>
+        <hr>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.username }}
             </div>
-            <div class="col-md-4">
-                <a href="{% url 'signup_url' %}" class="float-right">Registration</a>
+            <div class="form-group">
+                {{ form.password }}
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-8">
-                <h3>Поможем узнать Ваши сильные стороны</h3>
-            </div>
-            <div class="col-md-4">
-                <div class="card" style="background: rgba(235, 235, 235, 0.5);">
-                    <div class="card-body" >
-                        <h4 class="card-title text-center">Войти</h4>
-                        <hr>
-                        <form action="" method="POST">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                {{ form.username }}
-                            </div>
-                            <div class="form-group">
-                                {{ form.password }}
-                            </div>
-                            <button type="submit" class='btn btn-warning'>Войти</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+            <button type="submit" class='btn btn-warning btn-block text-dark'>Войти</button>
+        </form>
     </div>
 </div>
+
     
-    
-    
-{% endblock content %}
+{% endblock form %}
     

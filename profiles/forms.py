@@ -5,11 +5,14 @@ from .models import *
 
 
 class EditUserProfileForm(forms.ModelForm):
+    avatar = forms.ImageField(label=('Avatar'),required=False, error_messages = {'invalid':("Image files only")}, widget=forms.FileInput)
     class Meta:
         model = UserProfile
         fields = [
             'avatar'
         ]
+
+        
 
 class CreateRoomForm(forms.ModelForm):
     class Meta:
