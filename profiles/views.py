@@ -206,6 +206,7 @@ def calc_skill(request, slug):
                 print('----')
                 user_score -= 1*cur_user_score
 
+            print(request.user, user, cur_user_score, score, user_score)
             new_history = History(
                 who_vote=request.user, 
                 for_whom_vote=user, 
