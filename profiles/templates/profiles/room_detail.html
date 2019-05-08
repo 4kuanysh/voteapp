@@ -8,13 +8,13 @@ Room
 
 {% block title %}
 
-<h1>{{ room.name }}</h1>
+<h1>{{ cur_room.name }}</h1>
 
 {% endblock title %}
 
 
 {% block openform %}
-<form action="{% url 'calc_skill_url' room.slug %}" method="POST">
+<form action="{% url 'calc_skill_url' cur_room.slug %}" method="POST">
     {% csrf_token %}
 
     {% endblock openform %}
@@ -80,7 +80,7 @@ Room
     <div class="col-md-2 text-center">
         <h2 id="valrange">0</h2>
         <div class="slider-wrapper mb-1">
-            <input class="custom-range" type="range" name="score" id="score" min='0' max=10>
+            <input class="custom-range" type="range" name="score" id="score" min='0' max=10 value="0">
         </div>
         <div class="row mx-md-auto">
             <button type="submit" class="btn btn-dark ">Оценить</button>      
@@ -90,7 +90,8 @@ Room
     <div class="admin-panel align-items-center">
         <p>Админ панель</p>
         
-        <a href="{% url 'room_settings_url' room.slug %}" class="btn btn-dark">Настройки</a>
+        <a href="{{ cur_room.get_settings_absurl }}" class="btn btn-dark">Настройки</a>
+        <a href="{{ cur_room.get_room_info_url }}" class="btn btn-info">Информация</a>    
         
     </div>
     {% endif %}

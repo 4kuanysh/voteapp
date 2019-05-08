@@ -27,22 +27,34 @@ class EditProfile(LoginRequiredMixin, View):
     def get(self, request):
         userProfile = UserProfile.objects.get(user=request.user)
         form = EditUserProfileForm(instance=userProfile)
-        return render(request, 'profiles/edit_profile.html', context={'form': form})
+        user_form = EditUserForm(instance=request.user)
+        return render(request, 'profiles/edit_profile.html', context={'form': form, 'user_form':user_form})
     
     def post(self, request):
         userProfile = UserProfile.objects.get(user=request.user)
         form = EditUserProfileForm(request.POST, request.FILES, instance=userProfile)
+        bound_user_form = EditUserForm(request.POST, instance=request.user.userprofile)
         
         if form.is_valid():
             print(request.POST)
             new_userProfile = form.save()
-            return redirect('profile_url')
-        return render(request, 'profiles/edit_profile.html', context={'form': form}) 
+        return render(request, 'profiles/edit_profile.html', context={'form': form, 'user_form':bound_user_form})
+            
+@login_required(login_url='login_url')
+def edit_user(request):
+    form = EditUserProfileForm(instance=request.user.userprofile)
+    bound_user_form = EditUserForm(request.POST, instance=request.user.userprofile)
+    if bound_user_form.is_valid():
+        first_name = bound_user_form.cleaned_data.get('first_name')
+        last_name = bound_user_form.cleaned_data.get('last_name')
+        User.objects.filter(username=request.user.username).update(first_name=first_name, last_name=last_name)
+        print(first_name, last_name)
+    return render(request, 'profiles/edit_profile.html', context={'form': form, 'user_form':bound_user_form})
 
 class RoomDetail(LoginRequiredMixin, View):
     def get(self, request, slug):
-        room = get_object_or_404(Room, slug__iexact=slug)
-        msRoomUser = RoomUser.objects.filter(room=room)
+        cur_room = get_object_or_404(Room, slug__iexact=slug)
+        msRoomUser = RoomUser.objects.filter(room=cur_room)
         members = [user.user for user in msRoomUser]
         if not members.count(request.user):
             raise Http404
@@ -50,14 +62,14 @@ class RoomDetail(LoginRequiredMixin, View):
             if m.is_admin:
                 room_admin = m.user
         
-        skill_categories = RoomCategorySkill.objects.filter(room=room)
+        skill_categories = RoomCategorySkill.objects.filter(room=cur_room)
         # print('aaaaaaaaaaaaaaa->>>>', skill_categories)
         skills = list()
         for category in skill_categories:
             skills.append( [ skill for skill in Skill.objects.filter(category=category.category_skill) ] )
 
         context = {
-            'room': room,
+            'cur_room': cur_room,
             'members':members,
             'room_admin': room_admin,
             'skill_categories': skill_categories,
@@ -66,8 +78,8 @@ class RoomDetail(LoginRequiredMixin, View):
 
         return render(request, 'profiles/room_detail.html', context=context)
     def post(self, request, slug):
-        room = get_object_or_404(Room, slug__iexact=slug)
-        msRoomUser = RoomUser.objects.filter(room=room)
+        cur_room = get_object_or_404(Room, slug__iexact=slug)
+        msRoomUser = RoomUser.objects.filter(room=cur_room)
         members = [user.user for user in msRoomUser]
         if not members.count(request.user):
             raise Http404
@@ -75,13 +87,9 @@ class RoomDetail(LoginRequiredMixin, View):
             if m.is_admin:
                 room_admin = m.user
 
-        search_user = request.POST.get('search', '')
-        user_add = User.objects.get(username=search_user)
-        if search_user and not members.count(user_add):
-            RoomUser.objects.create(user=user_add, room=room)
-            members.append(user_add)
+        
         context = {
-            'room': room,
+            'cur_room': cur_room,
             'members':members,
             'room_admin': room_admin
         }
@@ -140,7 +148,8 @@ class RoomSettings(LoginRequiredMixin, View):
             'category_form': category_form,
             'existing_categories': existing_categories,
             'members':members,
-            'cur_room': cur_room
+            'cur_room': cur_room,
+            'room_admin': room_admin
         }
 
         return render(request, 'profiles/room_settings.html', context=context)
@@ -151,6 +160,9 @@ class RoomSettings(LoginRequiredMixin, View):
         room_skills = RoomCategorySkill.objects.filter(room=cur_room)
         msRoomUser = RoomUser.objects.filter(room=cur_room)
         members = [user.user for user in msRoomUser]
+        for m in msRoomUser:
+            if m.is_admin:
+                room_admin = m.user
         if not members.count(request.user):
             raise Http404
         category_form = CategorySkillForm(request.POST)
@@ -171,15 +183,18 @@ class RoomSettings(LoginRequiredMixin, View):
             'category_form': category_form,
             'existing_categories': existing_categories,
             'members':members,
-            'cur_room': cur_room
+            'cur_room': cur_room,
+            'room_admin': room_admin
         }
         return render(request, 'profiles/room_settings.html', context=context)
 
+@login_required(login_url='login_url')
 def calc_skill(request, slug):
     skill = request.POST.get('skill')
     score = float(request.POST.get('score'))
     member = request.POST.get('member')
     user = get_object_or_404(User, username=member)
+    cur_room = get_object_or_404(Room, slug=slug)
     skill_obj = get_object_or_404(Skill, name=skill)
     cur_user_score = 5.0
     for x in UserSkill.objects.filter(user=request.user.userprofile):
@@ -187,10 +202,12 @@ def calc_skill(request, slug):
             cur_user_score = float(x.value)*0.1
     sid = 0
     user_score = 0.0
+
     if user != request.user:
         if not [ x.skill for x in UserSkill.objects.filter(user=user.userprofile) ].count(skill_obj) :
             print('True', score*cur_user_score)
-            new_relation = UserSkill(user=user.userprofile, skill=skill_obj, value=(score*cur_user_score))
+            user_score = score*cur_user_score
+            new_relation = UserSkill(user=user.userprofile, skill=skill_obj, value=user_score)
             new_relation.save()
         else:
             
@@ -206,20 +223,24 @@ def calc_skill(request, slug):
                 print('----')
                 user_score -= 1*cur_user_score
 
-            print(request.user, user, cur_user_score, score, user_score)
-            new_history = History(
-                who_vote=request.user, 
-                for_whom_vote=user, 
-                coefficient_who_vote=cur_user_score, 
-                mark_who_vote=score,
-                value_for_whom_vote= user_score
-                )
-            new_history.save()
+            
             UserSkill.objects.filter(id=sid).update(value=user_score)
 
+        print(request.user, user, cur_user_score, score, user_score)
+        new_history = History(
+            who_vote=request.user, 
+            for_whom_vote=user, 
+            skill=skill_obj,
+            room=cur_room,
+            coefficient_who_vote=cur_user_score, 
+            mark_who_vote=score,
+            value_for_whom_vote= user_score
+            )
+        new_history.save()
     print(skill, score, member, user_score)
     return redirect(Room.get_redirect_url(slug=slug))
 
+@login_required(login_url='login_url')
 def delete_category(request, slug):
     categories = request.POST.getlist('delete_category')
     print(categories)
@@ -235,3 +256,67 @@ def delete_category(request, slug):
         print('After delete', RoomCategorySkill.objects.filter(room=cur_room).filter(category_skill=cur_category))
 
     return redirect(Room.get_settings_url(slug=slug))
+
+@login_required(login_url='login_url')
+def delete_member(request, slug):
+    members = request.POST.getlist('delete_member')
+    cur_room = get_object_or_404(Room, slug=slug)
+    room_admin = RoomUser.objects.filter(room=cur_room).filter(is_admin=True)
+    print(room_admin[0].user)
+    for member in members:
+        cur_member = get_object_or_404(User, username=member)
+        if room_admin[0].user != cur_member:
+            instance = RoomUser.objects.filter(room=cur_room).filter(user=cur_member)
+            instance.delete()
+    return redirect(Room.get_settings_url(slug=slug))
+
+@login_required(login_url='login_url')
+def add_new_member(request, slug):
+    room = get_object_or_404(Room, slug__iexact=slug)
+    msRoomUser = RoomUser.objects.filter(room=room)
+    members = [user.user for user in msRoomUser]
+    search_user = request.POST.get('search', '')
+    user_add = User.objects.get(username=search_user)
+    if search_user and not members.count(user_add):
+        RoomUser.objects.create(user=user_add, room=room)
+    return redirect(Room.get_settings_url(slug=slug))
+    
+@login_required(login_url='login_url')
+def ask_delete_room(request, slug):
+    cur_room = get_object_or_404(Room, slug=slug)
+    return render(request, 'profiles/room_delete.html', context={'cur_room': cur_room})
+
+@login_required(login_url='login_url')
+def delete_room(request, slug):
+    cur_room = get_object_or_404(Room, slug=slug)
+    
+    room_skills = RoomCategorySkill.objects.filter(room=cur_room)
+    room_skills.delete()
+
+    room_members = RoomUser.objects.filter(room=cur_room)
+    room_members.delete()
+
+    return redirect('/')
+
+@login_required(login_url='login_url')
+def room_info(request, slug):
+    cur_room = get_object_or_404(Room, slug=slug)
+    members = RoomUser.objects.filter(room=cur_room)
+    members = [x.user for x in members]
+    room_admin = RoomUser.objects.filter(room=cur_room).filter(is_admin=True)
+
+    users_skills = list()
+    for member in members:
+        user_skills = UserSkill.objects.filter(user=member.userprofile)
+        if not user_skills:
+            user_skills = ["empty", member.id, member.username]
+        users_skills.append(user_skills)
+    
+    context = {
+        'cur_room': cur_room,
+        'members': members,
+        'room_admin': room_admin[0],
+        'users_skills': users_skills
+    }
+    return render(request, 'profiles/room_info.html', context=context)
+

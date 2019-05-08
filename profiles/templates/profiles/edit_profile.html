@@ -23,7 +23,7 @@
     
 
 {% block title %}
-    Редактировать профиль
+    <h3>Редактировать профиль</h3>
 {% endblock title %}
     
 
@@ -37,11 +37,18 @@
         <button type="submit">Изменить фото</button>
     </form>
 </div>
-<div class="col-md-9">
-    <h1>Hello, {{ user.id }} - {{ user.username}}</h1>
+<div class="col-md-5">
+    <h1>Привет, {{ user.username}}</h1>
     
-    
-    <a href="{% url 'logout_url' %}" class="btn btn-dark">Logout</a>
+    <form action="{% url 'edit_user_url' %}" method="POST">
+        {% csrf_token %}
+        {{ user_form.as_p }}
+        <button type="submit">Изменить</button>
+    </form>
+</div>
+<div class="col-md-4">
+    <a href="/" class="btn btn-dark">Профиль</a>
+
 </div>
 {% endblock content %}
     

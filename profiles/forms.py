@@ -12,6 +12,24 @@ class EditUserProfileForm(forms.ModelForm):
             'avatar'
         ]
 
+class EditUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = [
+            'first_name',
+            'last_name'
+        ]
+
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'})
+        }
+        labels = {
+            'first_name': 'Имя',
+            'last_name': 'Фамилия',
+
+        }
+
         
 
 class CreateRoomForm(forms.ModelForm):

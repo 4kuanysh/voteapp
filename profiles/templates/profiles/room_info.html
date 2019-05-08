@@ -1,0 +1,94 @@
+{% extends 'profiles/base.html' %}
+
+
+{% block title %}
+<h3> Информация по участникам </h3>
+{% endblock title %}
+
+
+{% block sidebar %}
+<div class="list-group">
+    <h3 class="list-group-item">
+        <p>Участники:</p>
+    </h3>
+
+
+    {% for member in members %}
+
+    <a href="#user{{member.id}}" role="tab" class="list-group-item list-group-item-action nav-link"
+        id="{{member.username}}-tab" data-toggle="tab" aria-controls="{{member.username}}"
+        aria-selected="{% if forloop.first %} true {% endif %}">
+        <img src="{{ member.userprofile.avatar.url }}" alt="avatar" width="80">
+        {{ member.username }}
+        {% if member == room_admin %}
+        <span class="badge badge-warning">admin</span>
+        {% endif %}
+
+    </a>
+    {% endfor %}
+
+</div>
+
+{% endblock sidebar %}
+
+{% block content %}
+<div class="col-md-12">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="tab-content">
+                    {% for user_skills in users_skills %}
+
+
+                    {% if user_skills.0 == "empty" %}
+
+                    <div class="tab-pane fade{% if forloop.first %} in active {% endif %}" id="user{{user_skills.1}}"
+                        role="tabpanel" aria-labelledby="{{user_skills.2}}-tab">
+                        Нет способностей
+                    </div>
+
+                    {% else %}
+
+                    <div class="tab-pane fade{% if forloop.first %} in active {% endif %}"
+                        id="user{{user_skills.0.user.user.id}}" role="tabpanel"
+                        aria-labelledby="{{user_skills.0.user.user.username}}-tab">
+
+                        {% for skill in user_skills %}
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>{{skill.skill.name}}</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="progress">
+                                    <div class="progress-bar {% if skill.value < 50 %} bg-danger {% else %} bg-success {% endif %}progress-bar-striped"
+                                        style='width:{{skill.value}}%'>
+                                        {{skill.value}}%
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        {% endfor %}
+                    </div>
+                        {% endif %}
+                    
+
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="admin-panel align-items-center">
+    <p>Админ панель</p>
+
+    <a href="{{ cur_room.get_absolute_url }}" class="btn btn-dark">Комната</a>
+    <a href="{{ cur_room.get_settings_absurl }}" class="btn btn-dark">Настройки</a>
+
+
+</div>
+
+
+{% endblock content %}

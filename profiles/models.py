@@ -34,7 +34,24 @@ class Room(models.Model):
 
     def get_redirect_url(slug):
         return reverse('room_detail_url', kwargs={'slug': slug})
-    
+
+    def get_settings_absurl(self):
+        return reverse('room_settings_url', kwargs={'slug': self.slug})
+
+    def get_delete_url(self):
+        return reverse('delete_room_url', kwargs={'slug': self.slug})
+        
+
+    def get_ask_delete_room_url(self):
+        return reverse('ask_delete_room_url', kwargs={'slug': self.slug})
+        
+    def get_delete_room_url(self):
+        return reverse('delete_room_url', kwargs={'slug': self.slug})
+
+    def get_room_info_url(self):
+        return reverse('room_info_url', kwargs={'slug': self.slug})
+
+
     def save(self, *args, **kwargs):
         if not self.id:
             self.slug = gen_slug(self.name)
@@ -85,6 +102,7 @@ class History(models.Model):
     who_vote = models.ForeignKey(User, related_name='his_votes', on_delete=models.CASCADE)
     for_whom_vote = models.ForeignKey(User, related_name='votes_for_him', on_delete=models.CASCADE)
     skill = models.ForeignKey(Skill, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
     coefficient_who_vote = models.DecimalField(max_digits=5, decimal_places=2)
     mark_who_vote = models.IntegerField()
     value_for_whom_vote = models.DecimalField(max_digits=5, decimal_places=2)

@@ -2,25 +2,30 @@
 
 
 {% block title %}
-<h3> Room settings </h3>
+<h3> Настройки комнаты </h3>
 {% endblock title %}
 
 
 {% block sidebar %}
 <div class="list-group">
+        <form action="{% url 'room_member_delete_url' cur_room.slug %}" method="POST" >
         <h3 class="list-group-item">
-            <p>Участники:</p>
+            <p> Участники:</p>
         </h3>
+        <button type="submit" class="btn btn-dark btn-block">Исключить</button>
+        {% csrf_token %}
         {% for member in members %}
         <label class="list-group-item list-group-item-action">
+            <input class="form-check-input" name="delete_member" type="checkbox" value="{{member.username}}" id="{{member.username}}-{{member.id}}">
             <img src="{{ member.userprofile.avatar.url }}" alt="avatar" width="80" for="{{member.username}}-{{member.id}}">
             {{ member.username }}
             {% if member == room_admin %}
-            admin
+            <span class="badge badge-warning">admin</span>            
             {% endif %}
             
         </label>
         {% endfor %}
+        </form>
 
     </div>
 {% endblock sidebar %}
@@ -59,13 +64,15 @@
         </div>
         <div class="col-md-4">
             <h3>Поиск пользователей</h3>
-            <form action="{{ Room.get_absolute_url }}" method="POST">
+            <form action="{% url 'room_add_new_member_url' cur_room.slug %}" method="POST">
                 {% csrf_token %}
-            <input class="form-control" type="search" placeholder="Username пользователя" aria-label="Search" name='search' id='id_search'>
+                <input class="form-control" type="search" placeholder="Username пользователя" aria-label="Search" name='search' id='id_search'>
                 <button type="submit" class="btn btn-dark mt-md-3">Добавить в комнату</button>
             </form>
             <h4>Результат поиска</h4>
-            <div id='result_search'></div>
+            <div id='result_search'>
+                ...
+            </div>
         </div>
     </div>
 </div>
@@ -74,6 +81,8 @@
     <p>Админ панель</p>
     
     <a href="{{ cur_room.get_absolute_url }}" class="btn btn-dark">Комната</a>
+    <a href="{{ cur_room.get_room_info_url }}" class="btn btn-info">Информация</a>    
+    <a href="{{ cur_room.get_ask_delete_room_url }}" class="btn btn-danger">Закрыть комнату</a>
     
 </div>
 
